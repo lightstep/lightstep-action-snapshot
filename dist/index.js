@@ -2079,12 +2079,12 @@ async function run() {
         assertActionInput('lightstep_api_key')
         assertActionInput('lightstep_organization')
         assertActionInput('lightstep_project')
-        assertActionInput('lightstep_service')
+        assertActionInput('lightstep_snapshot_query')
 
         const apiKey = resolveActionInput('lightstep_api_key')
         const lightstepOrg = resolveActionInput('lightstep_organization')
         const lightstepProj = resolveActionInput('lightstep_project')
-        const lightstepService = resolveActionInput('lightstep_service')
+        const lightstepQuery = resolveActionInput('lightstep_snapshot_query')
 
         const apiClient = await lightstepSdk.init(lightstepOrg, apiKey)
         core.info(`Creating snapshot for project ${lightstepProj}...`)
@@ -2093,8 +2093,8 @@ async function run() {
             project      : lightstepProj,
             data         : {
                 data : {
-                    attributes : { 
-                        query : `service IN ("${lightstepService}")`
+                    attributes : {
+                        query : lightstepQuery
                     }
                 }
             }

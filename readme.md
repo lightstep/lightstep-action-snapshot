@@ -22,10 +22,10 @@ This action can be run on `ubuntu-latest` GitHub Actions runner.
       - name: Take Lightstep Snapshot
         id: lightstep-snapshot
         with:
-          lightstep_api_key: apiu_key
+          lightstep_api_key: api_key
           lightstep_organization: org
           lightstep_project: project
-          lightstep_service: service_name
+          lightstep_snapshot_query: service IN ("frontend")
 ```
 
 ## Examples
