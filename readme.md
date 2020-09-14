@@ -30,7 +30,29 @@ This action can be run on `ubuntu-latest` GitHub Actions runner.
 
 ## Examples
 
-TBD
+This workflow takes a snapshot of the `frontend` service when a GitHub deployment is created.
+
+```yaml
+on: deployment
+
+jobs:
+  deploy_check_job:
+    runs-on: ubuntu-latest
+    name: Verify Pre-Deploy Status
+
+    steps:  
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Take Lightstep Snapshot
+        uses: lightstep/lightstep-action-snapshot
+        id: lightstep-snapshot
+        with:
+          lightstep_api_key: api_key
+          lightstep_organization: org
+          lightstep_project: project
+          lightstep_snapshot_query: service IN ("frontend")
+```
 
 ## Inputs
 
