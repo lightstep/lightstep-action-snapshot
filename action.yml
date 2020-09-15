@@ -15,6 +15,10 @@ inputs:
     description: 'The Lightstep service associated with this repository'
     required: false
 
+  lightstep_snapshot_query:
+    description: 'The Lightstep snapshot query to capture when this action runs'
+    required: false
+
   lightstep_api_key:
     description: 'The key to access the Lightstep Public API'
     required: false
