@@ -1,4 +1,4 @@
-name: 'Take Lightstep Snapshot'
+name: 'Lightstep Snapshot'
 author: 'Lightstep, Inc.'
 description: 'Takes a snapshot of a service using the Lightstep API'
 
