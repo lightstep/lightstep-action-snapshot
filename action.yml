@@ -1,6 +1,6 @@
 name: 'Lightstep Snapshot'
 author: 'Lightstep, Inc.'
-description: 'Takes a snapshot of a service using the Lightstep API'
+description: 'Capture detailed system behavior at a point in time'
 
 branding:
   icon: 'camera'
