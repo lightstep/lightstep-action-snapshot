@@ -1,0 +1,42 @@
+on: deployment
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    name: Create PagerDuty Change Event with Snapshot
+
+    steps:  
+
+      - name: Take Lightstep Snapshot
+        uses: lightstep/lightstep-action-snapshot@0.0.2
+        id: lightstep-snapshot
+        with:
+          lightstep_api_key: ${{ secrets.LIGHTSTEP_API_KEY }}
+          lightstep_organization: your-org
+          lightstep_project: your-project
+          lightstep_snapshot_query: service IN ("your-service-name")
+
+      - name: Create PagerDuty Change Event
+        run: |
+          NOW=$(node -e 'console.log((new Date()).toISOString())')
+          curl -s --request POST \
+            --url https://events.pagerduty.com/v2/change/enqueue \
+            --header 'content-type: application/json' \
+            --data '{
+              "routing_key": "${{ secrets.PAGERDUTY_ROUTING_KEY }}",
+              "payload": {
+                "summary": "Lightstep Snapshot Created",
+                "source": "lightstep/github-action-predeploy",
+                "timestamp": "'"$NOW"'"
+              },
+              "links": [
+                {
+                  "href": "https://app.lightstep.com/${{ steps.lightstep-snapshot.inputs.lightstep_project }}/explorer?snapshot_id=${{ steps.lightstep-snapshot.outputs.lightstep_snapshot_id }}",
+                  "text": "Lightstep Service Snapshot"
+                },
+                {
+                  "href": "https://github.com/'"$GITHUB_REPOSITORY"'/commit/'"$GITHUB_SHA"'",
+                  "text": "GitHub Commit"
+                }
+              ]
+            }'

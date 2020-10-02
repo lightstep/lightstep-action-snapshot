@@ -1,0 +1,17 @@
+on: deployment
+
+jobs:
+  take_snapshot:
+    runs-on: ubuntu-latest
+    name: Take Snapshot
+
+    steps:
+
+      - name: Take Lightstep Snapshot
+        uses: lightstep/lightstep-action-snapshot@0.0.2
+        id: lightstep-snapshot
+        with:
+          lightstep_api_key: ${{ secrets.LIGHTSTEP_API_KEY }}
+          lightstep_organization: your-org
+          lightstep_project: your-project
+          lightstep_snapshot_query: service IN ("frontend")

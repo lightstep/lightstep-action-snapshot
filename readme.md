@@ -32,6 +32,8 @@ This action can be run on `ubuntu-latest` GitHub Actions runner.
 
 This workflow takes a snapshot of the `frontend` service when a GitHub deployment is created.
 
+Additional examples are in the `examples/workflows` directory.
+
 ```yaml
 on: deployment
 
@@ -69,6 +71,17 @@ The following are **required**:
 ## Outputs
 
 * `lightstep_snapshot_id` - ID of the created snapshot.
+
+## Using locally
+
+This action can also be used with the [`act`](https://github.com/nektos/act) tool to run this action locally.
+
+For example, this act with the example snapshot workflow in this repository to take a snapshot from a local environment:
+
+```
+  $ export LIGHTSTEP_API_KEY=your-api-key
+  $ act deployment -s LIGHTSTEP_API_KEY=$LIGHTSTEP_API_KEY -W examples/workflows/snapshot.yml
+```
 
 ## License
 
