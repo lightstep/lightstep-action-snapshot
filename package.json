@@ -1,7 +1,7 @@
 {
   "name": "lightstep-action-snapshot",
-  "version": "0.0.2",
-  "description": "",
+  "version": "0.0.3",
+  "description": " GitHub Action that captures full distributed system behavior at a point in time. ",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
@@ -10,13 +10,13 @@
     "all": "npm run lint && npm run prepare && npm run test"
   },
   "keywords": [],
-  "author": "",
+  "author": "Lightstep, Inc.",
   "license": "ISC",
   "dependencies": {
-    "@actions/core": "^1.2.4",
+    "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "js-yaml": "^3.14.0",
-    "lightstep-js-sdk": "git+ssh://git@github.com/lightstep/lightstep-js-sdk.git"
+    "lightstep-js-sdk": "git://github.com/lightstep/lightstep-js-sdk.git"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.22.3",
