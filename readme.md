@@ -4,6 +4,8 @@ The `lightstep/lightstep-action-snapshot` takes a [snapshot](https://lightstep.c
 
 Snapshots help you correlate code changes in GitHub with latency and errors in different environments.
 
+![Example Output in a PR](./examples/example-screenshot.png)
+
 ## Requirements
 
 ### Lightstep
