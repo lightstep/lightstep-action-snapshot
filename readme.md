@@ -1,7 +1,10 @@
 # lightstep-action-snapshot
 
-The `lightstep/lightstep-action-snapshot` takes a [snapshot](https://lightstep.com/blog/snapshots-detailed-system-behavior-saved-shareable/) of a service in Lightstep.
+The `lightstep/lightstep-action-snapshot` takes a [snapshot](https://lightstep.com/blog/snapshots-detailed-system-behavior-saved-shareable/) of a service in Lightstep and optionally attaches analysis of existing snapshot(s) to related pull requests or issues.
 
+Snapshots help you correlate code changes in GitHub with latency and errors in different environments.
+
+![Example Output in a PR](./examples/example-screenshot.png)
 
 ## Requirements
 
@@ -14,51 +17,32 @@ The `lightstep/lightstep-action-snapshot` takes a [snapshot](https://lightstep.c
 
 This action can be run on `ubuntu-latest` GitHub Actions runner.
 
+Taking a snapshot requires one step and no other dependencies:
+
 ```
     steps:  
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Take Lightstep Snapshot
         id: lightstep-snapshot
         with:
-          lightstep_api_key: api_key
+          lightstep_api_key: ${{ secrets.LIGHTSTEP_API_KEY }}
           lightstep_organization: org
           lightstep_project: project
+          # See https://api-docs.lightstep.com/reference#query-syntax
+          # for supported queries.
           lightstep_snapshot_query: service IN ("frontend")
 ```
 
-## Examples
+Most workflows will involve taking a snapshot and performing analysis on that snapshot, usually in the context of a PR or Issue.
 
-This workflow takes a snapshot of the `frontend` service when a GitHub deployment is created.
+## Example Workfkows
 
-Additional examples are in the `examples/workflows` directory.
-
-```yaml
-on: deployment
-
-jobs:
-  deploy_check_job:
-    runs-on: ubuntu-latest
-    name: Verify Pre-Deploy Status
-
-    steps:  
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Take Lightstep Snapshot
-        uses: lightstep/lightstep-action-snapshot
-        id: lightstep-snapshot
-        with:
-          lightstep_api_key: api_key
-          lightstep_organization: org
-          lightstep_project: project
-          lightstep_snapshot_query: service IN ("frontend")
-```
+* [Take a snapshot in response to an API trigger](./examples/workflows/snapshot.yml)
+* [Take a snapshot after a deploy and get a report of what changed as a pull request comment](./examples/workflows/after_deploy.yml)
+* [Take a snapshot when a specific label is applied to an issue](./examples/workflows/snapshot_to_issue.yml)
 
 ## Inputs
 
-The following are **required**:
+The following are **required** and can also be passed as environment variables:
 
 | Action Input             | Env var                   |
 | ------------------------ | ------------------------- |
@@ -67,10 +51,33 @@ The following are **required**:
 | `lightstep_service`      | `LIGHTSTEP_SERVICE`       |
 | `lightstep_api_key`      | `LIGHTSTEP_API_KEY`       |
 
+To take a snapshot, the following input is **required**:
+
+| Action Input               | Description                                                                                                |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `lightstep_snapshot_query` | [Query](https://api-docs.lightstep.com/reference#query-syntax) for what telemetry to collect in a snapshot |
+
+To analyze a snapshot, the following input is **required**:
+
+| Action Input               | Description                                                         |
+| -------------------------- | ------------------------------------------------------------------- |
+| `lightstep_snapshot_id`    | Existing snapshot id to analyze and add as a comment on an issue/PR |
+
+
+The following are **optional**:
+
+| Action Input                    | Description                                         |
+| ------------------------------- | --------------------------------------------------- |
+| `lightstep_snapshot_compare_id` | Snapshot to compare with `lightstep_snapshot_id`    |
+| `disable_comment`               | Prevents a comment from being added to an issue/PR  |
 
 ## Outputs
 
-* `lightstep_snapshot_id` - ID of the created snapshot.
+| Action Input             | Summary                            |
+| ------------------------ | ---------------------------------- |
+| `lightstep_snapshot_id`  | ID of the taken snapshot           |
+| `lightstep_snapshot_md`  | Markdown analysis of the snapshot  |
+
 
 ## Using locally
 

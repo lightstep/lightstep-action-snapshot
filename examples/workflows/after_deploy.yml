@@ -1,0 +1,48 @@
+name: Lightstep Post-Deploy Check
+on:
+  deployment_status:
+
+jobs:    
+  postdeploy_check_job:
+    runs-on: ubuntu-latest
+    name: Compare Snapshots
+    if: github.event.deployment_status.state == 'success'
+    steps:  
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: 📸 Take Lightstep Snapshot
+        id: lightstep-take-snapshot
+        uses: lightstep/lightstep-action-snapshot@v2
+        with:
+          lightstep_api_key: ${{ secrets.LIGHTSTEP_API_TOKEN }}
+          # Recommended to use a query based on SHA (or version) so telemetry always 
+          # points to the code that's being deployed in this workflow
+          lightstep_snapshot_query: '"github.sha" IN ("${{ github.sha }}")'
+
+      - name: Wait for Snapshot to Complete
+        run: sleep 240
+
+      - name: Cache Snapshots
+        id: cache-snapshots
+        uses: actions/cache@v2
+        with:
+          path: /tmp/lightstep
+          key: ${{ steps.lightstep-take-snapshot.outputs.lightstep_project }}-snapshots
+
+      - name: Compare Snapshots
+        id: lightstep-snapshot
+        uses: lightstep/lightstep-action-snapshot@v2
+        env:
+          ROLLBAR_API_TOKEN: ${{ secrets.ROLLBAR_API_TOKEN }}
+          PAGERDUTY_API_TOKEN: ${{ secrets.PAGERDUTY_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          lightstep_api_key: ${{ secrets.LIGHTSTEP_API_TOKEN }}
+          # Infer a recent snapshot to compare with using the API:
+          # '*' uses most recent available (per project or repo tag if exists)
+          lightstep_snapshot_compare_id: '*'
+          # If your project has lots of services, you can filter the output
+          # to a subset. This is useful for monorepos.
+          lightstep_service_filter: web,iOS,android,inventory
+          lightstep_snapshot_id: ${{ steps.lightstep-take-snapshot.outputs.lightstep_snapshot_id }}

@@ -1,11 +1,11 @@
 {
   "name": "lightstep-action-snapshot",
-  "version": "0.0.3",
-  "description": " GitHub Action that captures full distributed system behavior at a point in time. ",
+  "version": "0.2.0",
+  "description": "GitHub Action that captures full distributed system behavior at a point in time. ",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "build": "ncc build index.js -o dist --source-map",
+    "build": "ncc build action.js -o dist/action --source-map && cp main.js dist/",
     "test": "jest",
     "all": "npm run lint && npm run prepare && npm run test"
   },
@@ -15,12 +15,13 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
+    "@lightstep/lightstep-api-js": "git+https://github.com/lightstep/lightstep-api-js.git",
     "js-yaml": "^3.14.0",
-    "lightstep-js-sdk": "git://github.com/lightstep/lightstep-js-sdk.git"
+    "lodash.template": "^4.5.0"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.22.3",
-    "eslint": "^7.4.0",
-    "jest": "^26.1.0"
+    "eslint": "^7.12.1",
+    "jest": "^26.6.2"
   }
 }

@@ -15,22 +15,53 @@ inputs:
     description: 'The Lightstep project associated with this repository'
     required: false
 
-  lightstep_service:
-    description: 'The Lightstep service associated with this repository'
+  lightstep_service_filter:
+    description: 'Only show services in the snapshot from this comma-separated list'
     required: false
 
   lightstep_snapshot_query:
-    description: 'The Lightstep snapshot query to capture when this action runs'
+    description: 'The query to use when taking a snapshot'
+    required: false
+
+  lightstep_snapshot_id:
+    description: 'The Lightstep snapshot id to summarize'
+    required: false
+
+  lightstep_snapshot_compare_id:
+    description: 'The Lightstep snapshot id to compare with lightstep_snapshot_id'
     required: false
 
   lightstep_api_key:
     description: 'The key to access the Lightstep Public API'
     required: false
 
+  github_token:
+    description: 'Github API Token'
+    required: false
+
+  disable_comment:
+    description: 'If set to true, will not add a comment to pull-requests'
+    required: false
+
 outputs:
+  lightstep_project:
+    description: 'Lightstep Project'
+
+  lightstep_organization:
+    description: 'Lightstep Organization'
+
   lightstep_snapshot_id:
     description: 'Lightstep Snapshot ID'
 
+  lightstep_snapshot_md:
+    description: 'Lightstep Snapshot Markdown Summary'
+
+  lightstep_snapshot_dotviz:
+    description: 'Lightstep Snapshot dotviz output of service relationships'
+
+  lightstep_snapshot_has_violations:
+    description: 'Set if user-configured violations are found in the snapshot'
+
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'dist/main.js'
