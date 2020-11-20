@@ -1,0 +1,59 @@
+name: Attach Lightstep Snapshot to Issue
+
+on:
+  workflow_dispatch:
+  issues:
+    types: [labeled]
+
+jobs:
+  add_snapshot_to_issue:
+    runs-on: ubuntu-latest
+    name: Take Snapshot
+    # Run this if an issue has the label 'bug'
+    if: contains(github.event.issue.labels.*.name, 'bug')
+
+    steps:
+      # Check out the repo to read configuration 
+      # from the `.lightstep.yml` file in the repo root directory.
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v2
+
+      - name: 📸 Take Lightstep Snapshot
+        id: take-lightstep-snapshot
+        uses: lightstep/lightstep-action-snapshot@v2
+        # Pass in partner API token integrations
+        env:
+          ROLLBAR_API_TOKEN: ${{ secrets.ROLLBAR_API_TOKEN }}
+          PAGERDUTY_API_TOKEN: ${{ secrets.PAGERDUTY_API_TOKEN }}
+        with:
+          lightstep_api_key: ${{ secrets.LIGHTSTEP_API_TOKEN }}
+          # Infer a recent snapshot to compare with using the API:
+          # '*' uses most recent available (per project or repo tag if exists)
+          lightstep_snapshot_compare_id: '*'
+          # Query for the snapshot
+          # Recommended to use a query based on SHA (for issues, this points to the main branch)
+          lightstep_snapshot_query: '"github.sha" IN ("${{ github.sha }}")'
+
+      - name: Wait for Snapshot to Complete
+        run: sleep 240
+
+      - name: Cache Snapshots
+        id: cache-snapshots
+        uses: actions/cache@v2
+        with:
+          path: /tmp/lightstep
+          key: ${{ steps.take-lightstep-project.outputs.lightstep_project }}-snapshots
+
+      - name: Snapshot Summary
+        id: lightstep-snapshot-summary
+        uses: lightstep/lightstep-action-snapshot@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          lightstep_api_key: ${{ secrets.LIGHTSTEP_API_TOKEN }}
+          lightstep_snapshot_id: ${{ steps.take-lightstep-snapshot.outputs.lightstep_snapshot_id }}
+          # If your project has lots of services, you can filter the output
+          # to a subset. This is useful for monorepos.
+          lightstep_service_filter: web,iOS,android,inventory
+
+

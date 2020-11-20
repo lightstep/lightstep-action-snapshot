@@ -1,4 +1,4 @@
-on: deployment
+on: workflow_dispatch
 
 jobs:
   take_snapshot:
