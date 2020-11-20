@@ -24,4 +24,4 @@ jobs:
       run: |
         npm run build
         # Fail if "npm run build" generated new changes in dist
-        git update-index --refresh dist/* && git diff-index --quiet HEAD dist
+        git update-index --refresh dist/action/* && git diff-index --quiet HEAD dist/action
