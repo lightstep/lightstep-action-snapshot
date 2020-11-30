@@ -10,8 +10,8 @@ Snapshots help you correlate code changes in GitHub with latency and errors in d
 
 ### Lightstep
 
-  * Instrumented service(s) running in a production environment
-  * Lightstep API key
+  * Instrumented service(s) running in a production environment ([create account here](https://app.lightstep.com/signup))
+  * Lightstep [API key](https://docs.lightstep.com/docs/create-and-manage-api-keys)
 
 ## Usage
 
