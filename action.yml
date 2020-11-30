@@ -1,6 +1,6 @@
 name: 'Lightstep Snapshot'
 author: 'Lightstep, Inc.'
-description: 'Capture detailed system behavior at a point in time'
+description: 'Capture and analyze detailed behavior of your services using Lightstep'
 
 branding:
   icon: 'camera'
