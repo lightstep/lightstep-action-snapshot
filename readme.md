@@ -1,6 +1,6 @@
-# lightstep-action-snapshot
+# Lightstep Services Change Report 
 
-The `lightstep/lightstep-action-snapshot` takes a [snapshot](https://lightstep.com/blog/snapshots-detailed-system-behavior-saved-shareable/) of a service in Lightstep and optionally attaches analysis of existing snapshot(s) to related pull requests or issues that helps developers understand how their production services change over time.
+The `lightstep/lightstep-action-snapshot` action takes a [snapshot](https://lightstep.com/blog/snapshots-detailed-system-behavior-saved-shareable/) of a service in Lightstep and optionally attaches analysis of existing snapshot(s) to related pull requests or issues that helps developers understand how their production services change over time.
 
 Snapshots help you correlate code changes in GitHub with latency and errors in different environments.
 
