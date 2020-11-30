@@ -1,6 +1,6 @@
 # lightstep-action-snapshot
 
-The `lightstep/lightstep-action-snapshot` takes a [snapshot](https://lightstep.com/blog/snapshots-detailed-system-behavior-saved-shareable/) of a service in Lightstep and optionally attaches analysis of existing snapshot(s) to related pull requests or issues.
+The `lightstep/lightstep-action-snapshot` takes a [snapshot](https://lightstep.com/blog/snapshots-detailed-system-behavior-saved-shareable/) of a service in Lightstep and optionally attaches analysis of existing snapshot(s) to related pull requests or issues that helps developers understand how their production services change over time.
 
 Snapshots help you correlate code changes in GitHub with latency and errors in different environments.
 
@@ -32,7 +32,7 @@ Taking a snapshot requires one step and no other dependencies:
           lightstep_snapshot_query: service IN ("frontend")
 ```
 
-Most workflows will involve taking a snapshot and performing analysis on that snapshot, usually in the context of a PR or Issue.
+Most workflows will involve taking a snapshot *and* performing analysis on that snapshot, usually in the context of a GitHub PR or Issue. See examples below.
 
 ## Example Workfkows
 
@@ -68,7 +68,7 @@ The following are **optional**:
 
 | Action Input                    | Description                                         |
 | ------------------------------- | --------------------------------------------------- |
-| `lightstep_snapshot_compare_id` | Snapshot to compare with `lightstep_snapshot_id`    |
+| `lightstep_snapshot_compare_id` | Snapshot to compare with `lightstep_snapshot_id` - if set to `*` will find the most recent snapshot  |
 | `disable_comment`               | Prevents a comment from being added to an issue/PR  |
 
 ## Outputs
